@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
     "lib/after_commit/after_savepoint.rb",
     "lib/after_commit/connection_adapters.rb"
   ]
-  s.homepage = %q{http://github.com/freelancing-god/after_commit}
+  s.homepage = %q{http://github.com/pat/after_commit}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.6.2}
   s.summary = %q{after_commit callback for ActiveRecord}
