@@ -4,16 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{after_commit}
-  s.version = "1.0.10"
+  s.name = "after_commit"
+  s.version = "1.0.11"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Muerdter", "David Yip", "Pat Allan"]
-  s.date = %q{2011-06-23}
-  s.description = %q{
-    A Ruby on Rails plugin to add an after_commit callback. This can be used to trigger methods only after the entire transaction is complete.
-  }
-  s.email = %q{pat@freelancing-gods.com}
+  s.date = "2013-01-11"
+  s.description = "\n    A Ruby on Rails plugin to add an after_commit callback. This can be used to trigger methods only after the entire transaction is complete.\n  "
+  s.email = "pat@freelancing-gods.com"
   s.extra_rdoc_files = [
     "LICENSE",
     "README.textile"
@@ -26,10 +24,10 @@ Gem::Specification.new do |s|
     "lib/after_commit/after_savepoint.rb",
     "lib/after_commit/connection_adapters.rb"
   ]
-  s.homepage = %q{http://github.com/pat/after_commit}
+  s.homepage = "http://github.com/pat/after_commit"
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.2}
-  s.summary = %q{after_commit callback for ActiveRecord}
+  s.rubygems_version = "1.8.16"
+  s.summary = "after_commit callback for ActiveRecord"
   s.test_files = ["test/after_commit_test.rb", "test/observer_test.rb", "test/test_helper.rb"]
 
   if s.respond_to? :specification_version then
