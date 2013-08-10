@@ -18,7 +18,7 @@ module AfterCommit
   def self.record_destroyed(connection, record)
     add_to_collection  :committed_records_on_destroy, connection, record
   end
-  
+
   def self.records(connection)
     collection :committed_records, connection
   end
@@ -47,11 +47,10 @@ module AfterCommit
       :committed_records_on_save,
       :committed_records_on_destroy
     ].each do |collection|
-      Thread.current[collection]                        ||= {}
-      Thread.current[collection][connection.old_transaction_key] = []
+      Thread.current[collection] && Thread.current[collection].delete(connection.old_transaction_key)
     end
   end
-  
+
   def self.add_to_collection(collection, connection, record)
     collection_map = collection_map(collection)
     transaction_key = connection.unique_transaction_key
@@ -63,13 +62,14 @@ module AfterCommit
       collection_map[transaction_key] = [record]
     end
   end
-  
+
   def self.collection(collection, connection)
     collection_map(collection)[connection.old_transaction_key] ||= []
   end
 
   def self.collection_map(collection)
     Thread.current[collection] ||= {}
+    Thread.current[collection][connection.old_transaction_key] || []
   end
 end
 
