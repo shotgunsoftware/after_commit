@@ -28,11 +28,13 @@ module AfterCommit
         end
 
         define_callbacks  :after_commit,
+                          :after_class_commit,
                           :after_commit_on_create,
                           :after_commit_on_update,
                           :after_commit_on_save,
                           :after_commit_on_destroy,
                           :after_rollback,
+                          :after_class_rollback,
                           :before_commit,
                           :before_commit_on_create,
                           :before_commit_on_update,

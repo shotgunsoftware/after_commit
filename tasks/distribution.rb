@@ -1,14 +1,4 @@
-require 'rake/rdoctask'
 require 'jeweler'
-
-desc 'Generate documentation for the after_commit plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'AfterCommit'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
 
 Jeweler::Tasks.new do |gem|
   gem.name = 'after_commit'

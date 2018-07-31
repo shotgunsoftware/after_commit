@@ -38,6 +38,7 @@ module AfterCommit
             trigger_after_commit_on_update_callbacks
             trigger_after_commit_on_save_callbacks
             trigger_after_commit_on_destroy_callbacks
+            trigger_after_commit_class_callbacks
             result
           ensure
             AfterCommit.cleanup(self)
@@ -63,6 +64,7 @@ module AfterCommit
             trigger_before_rollback_callbacks
             result = rollback_db_transaction_without_callback
             trigger_after_rollback_callbacks
+            trigger_after_rollback_class_callbacks
             result
           ensure
             AfterCommit.cleanup(self)
@@ -80,6 +82,18 @@ module AfterCommit
         end
 
         protected
+
+        def trigger_after_commit_class_callbacks
+          AfterCommit.classes_records(self).each do |record|
+            record.send :callback, :after_class_commit
+          end
+        end
+
+        def trigger_after_rollback_class_callbacks
+          AfterCommit.classes_records(self).each do |record|
+            record.send :callback, :after_class_rollback
+          end
+        end
 
         def trigger_before_commit_callbacks
           AfterCommit.records(self).each do |record|
