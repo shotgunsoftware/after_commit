@@ -136,8 +136,6 @@ class AfterCommitTest < Test::Unit::TestCase
     end
   end
 
-  def test_after
-
   def test_before_commit_on_create_is_called
     assert_equal true, MockRecord.create!.before_commit_on_create_called
   end
