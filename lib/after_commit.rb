@@ -61,14 +61,14 @@ module AfterCommit
   end
 
   def self.add_to_class_collection(connection, record)
-    committed_classes = fetch_committed_classes
+    committed_classes = collection_map(:committed_classes)
     transaction_key = connection.unique_transaction_key
 
     classes = committed_classes[transaction_key]
     if classes
       return unless classes.add?(record.class)
     else
-      collection_map[transaction_key] = Set.new(record.class)
+      committed_classes[transaction_key] = Set.new([record.class])
     end
     add_to_collection(:committed_classes_records, connection, record)
   end
@@ -91,12 +91,7 @@ module AfterCommit
 
   def self.collection_map(collection)
     Thread.current[collection] ||= {}
-    Thread.current[collection][connection.old_transaction_key] || []
-  end
-
-  def self.fetch_comitted_classes
-    Thread.current[:committed_classes] ||= {}
-    Thread.current[:committed_classes][connection.old_transaction_key] || []
+    Thread.current[collection]
   end
 end
 
