@@ -10,4 +10,4 @@ Rake::TestTask.new(:test) do |t|
   t.ruby_opts = ["-I#{test_dir}"]
 end
 
-task :test => :check_dependencies
+task :test

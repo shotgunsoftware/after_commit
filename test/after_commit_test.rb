@@ -103,6 +103,23 @@ class TrackCountRecord < ActiveRecord::Base
   end
 end
 
+class ClassCommitRecord < ActiveRecord::Base
+  attr_accessor :class_commit_count, :class_rollback_count
+
+  after_class_commit :update_count
+  after_class_rollback :update_rollback_count
+
+  def update_count
+    @class_commit_count ||= 0
+    @class_commit_count += 1
+  end
+
+  def update_rollback_count
+    @class_rollback_count ||= 0
+    @class_rollback_count += 1
+  end
+end
+
 class AfterCommitTest < Test::Unit::TestCase
   def teardown
     # always ensure that we've returned the transaction_pointer to zero

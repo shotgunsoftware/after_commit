@@ -1,3 +1,4 @@
 test.sqlite3
 pkg
 *.sw?
+Gemfile.lock

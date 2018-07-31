@@ -1,6 +1,7 @@
 module AfterCommit
   def self.record(connection, record)
-    add_to_collection  :committed_records, connection, record
+    add_to_collection(:committed_records, connection, record)
+    add_to_class_collection(connection, record)
   end
 
   def self.record_created(connection, record)
@@ -39,16 +40,37 @@ module AfterCommit
     collection :committed_records_on_destroy, connection
   end
 
+  def self.classes_records(connection)
+    collection :committed_classes_records, connection
+  end
+
   def self.cleanup(connection)
-    [
-      :committed_records,
-      :committed_records_on_create,
-      :committed_records_on_update,
-      :committed_records_on_save,
-      :committed_records_on_destroy
+    %i[
+      committed_records
+      committed_records_on_create
+      committed_records_on_update
+      committed_records_on_save
+      committed_records_on_destroy
+      committed_classes_records
     ].each do |collection|
-      Thread.current[collection] && Thread.current[collection].delete(connection.old_transaction_key)
+      Thread.current[collection] &&
+        Thread.current[collection].delete(connection.old_transaction_key)
     end
+    Thread.current[:committed_classes] &&
+      Thread.current[:committed_classes].delete(connection.old_transaction_key)
+  end
+
+  def self.add_to_class_collection(connection, record)
+    committed_classes = fetch_committed_classes
+    transaction_key = connection.unique_transaction_key
+
+    classes = committed_classes[transaction_key]
+    if classes
+      return unless classes.add?(record.class)
+    else
+      collection_map[transaction_key] = Set.new(record.class)
+    end
+    add_to_collection(:committed_classes_records, connection, record)
   end
 
   def self.add_to_collection(collection, connection, record)
@@ -56,7 +78,7 @@ module AfterCommit
     transaction_key = connection.unique_transaction_key
 
     records = collection_map[transaction_key]
-    if (records)
+    if records
       records << record
     else
       collection_map[transaction_key] = [record]
@@ -70,6 +92,11 @@ module AfterCommit
   def self.collection_map(collection)
     Thread.current[collection] ||= {}
     Thread.current[collection][connection.old_transaction_key] || []
+  end
+
+  def self.fetch_comitted_classes
+    Thread.current[:committed_classes] ||= {}
+    Thread.current[:committed_classes][connection.old_transaction_key] || []
   end
 end
 
