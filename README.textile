@@ -18,12 +18,14 @@ The following callbacks are provided:
 * before_commit_on_save
 * before_commit_on_destroy
 * after_commit
+* after_class_commit
 * after_commit_on_create
 * after_commit_on_update
 * after_commit_on_save
 * after_commit_on_destroy
 * before_rollback
 * after_rollback
+* after_class_rollback
 
 You can use these just like you would any other callback:
 
