@@ -1,4 +1,8 @@
 module AfterCommit
+  def self.add_class_to_after_commit_stack(klass)
+    add_to_class_collection(ActiveRecord::Base.connection, klass.new)
+  end
+
   def self.record(connection, record)
     add_to_collection(:committed_records, connection, record)
     add_to_class_collection(connection, record)
